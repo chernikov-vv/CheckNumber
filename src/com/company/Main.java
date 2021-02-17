@@ -18,7 +18,6 @@ public class Main {
             if (number.substring(i, i + 1).equals(")") || number.substring(i, i + 1).equals("(")
                     || number.substring(i, i + 1).equals(" ")) {
                 checkIncorrectSym = true;
-                continue;
             } else
                 helpNumber += number.substring(i, i + 1);
         }
