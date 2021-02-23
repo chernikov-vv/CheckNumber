@@ -6,7 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
         String number = "+79886554450";
-        checkNumber(number);
         System.out.println(Arrays.toString(checkNumber(number)));
     }
 
