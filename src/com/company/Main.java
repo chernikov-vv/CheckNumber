@@ -1,52 +1,67 @@
 package com.company;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
-        String number = " + 7 (955) 165 2222 ";
+        String number = "+79886554450";
         checkNumber(number);
+        System.out.println(Arrays.toString(checkNumber(number)));
     }
 
-    public static void checkNumber(String number) {
-        String helpNumber = "";
-        boolean checkPlusSeven = false;
-        boolean checkIncorrectSym = false;
-        boolean checkLengthNumber = false;
+    public static String[] checkNumber(String number) {
         String[] answer = new String[2];
 
-        for (int i = 0; i < number.length(); i++) {
-            if (number.substring(i, i + 1).equals(")") || number.substring(i, i + 1).equals("(")
-                    || number.substring(i, i + 1).equals(" ")) {
+        if (!number.isEmpty() && number.length() >= 11) {
+
+            String helpNumber;
+            boolean checkPlusSeven = false;
+            boolean checkIncorrectSym = false;
+            boolean checkLengthNumber = false;
+
+            helpNumber = number.replace("+7", "8");
+            if (!number.equals(helpNumber)) {
+                checkPlusSeven = true;
+                answer[1] = "Замена +7 на 8";
+                number = helpNumber;
+            }
+
+            helpNumber = number.replaceAll("\\D", "");
+            if (!number.equals(helpNumber)) {
                 checkIncorrectSym = true;
-            } else
-                helpNumber += number.substring(i, i + 1);
+                if (checkPlusSeven) {
+                    answer[1] += "; " + "В номере есть пробелы и/или скобки";
+                } else {
+                    answer[1] = "В номере есть пробелы и/или скобки";
+                }
+            }
+
+            if (helpNumber.length() != 11) {
+                answer[0] = "Введен некорректный номер";
+                checkLengthNumber = true;
+                if((checkIncorrectSym || checkPlusSeven) && helpNumber.length()>11){
+                    answer[1]+="; Количество символов больше 11";
+                }
+                if((checkIncorrectSym || checkPlusSeven) && helpNumber.length()<11){
+                    answer[1]+="; Количество символов меньше 11";
+                }
+                if(helpNumber.length() > 11 && !checkIncorrectSym && !checkPlusSeven){
+                    answer[1] = "Количество символов больше 11";
+                }if(helpNumber.length() < 11 && !checkIncorrectSym && !checkPlusSeven){
+                    answer[1] = "Количество символов меньше 11";
+                }
+            } else {
+                answer[0] = helpNumber;
+            }
+
+            if (!checkIncorrectSym && !checkLengthNumber && !checkPlusSeven) {
+                answer[1] = "Не было изменений";
+            }
+        } else {
+            answer[0] = "Введен некорректный номер";
+            answer[1] = "Количество символов меньше 11";
         }
-        if (helpNumber.substring(0, 1).equals("+") && helpNumber.substring(1, 2).equals("7")) {
-            checkPlusSeven = true;
-            helpNumber = "8" + helpNumber.substring(2);
-        }
-        if (helpNumber.length() != 11)
-            checkLengthNumber = true;
-
-        if (checkLengthNumber)
-            answer[0] = "Некорректный номер. Количество символов больше 11";
-        else
-            answer[0] = helpNumber;
-
-        if (checkIncorrectSym)
-            answer[1] = "В номере есть пробелы и/или скобки";
-
-        if (checkPlusSeven) {
-            if (checkIncorrectSym)
-                answer[1] += "; ";
-            answer[1] += "Замена +7 на 8";
-        }
-
-        if (!checkPlusSeven && !checkIncorrectSym)
-            answer[1] = "Не было изменений";
-
-        for(int i =0; i< answer.length; i++){
-            System.out.println(answer[i]);
-        }
+        return answer;
     }
 }
